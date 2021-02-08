@@ -60,6 +60,10 @@
 	  const mainLogo           = document.getElementById('main-logo');
 	  const playGameButton     = document.getElementById('play-game');
 	  const gameOverImage      = document.getElementById('game-over');
+	  const nameInput          = document.getElementById('name-input');
+	  const finalScore         = document.getElementById('final-score');
+	  const successText        = document.getElementById('success');
+	  const saveToQRButton     = document.getElementById('create-qr');
 	  const menuButton         = document.getElementById('menu-button');
 	  const menuContainer      = document.getElementById('menu-container');
 	  const aboutButton        = document.getElementById('about-button');
@@ -108,6 +112,8 @@
 	    playGameButton.className    = 'hide';
 	    mainLogo.className          = 'hide';
 	    gameOverImage.className     = 'hide';
+	    successText.className       = 'hide';
+	    finalScore.className        = 'hide';
 	    grunt.className             = 'hide';
 	    soldier.className           = 'hide';
 	    invader.className           = 'hide';
@@ -126,6 +132,16 @@
 	    instructionsButton.className = '';
 	    resumeButton.className = '';
 	    restartButton.className = '';
+		});
+		
+		saveToQRButton.addEventListener("click", () => {
+			if(nameInput.value) {
+				nameInput.className = 'hide';
+				saveToQRButton.className = 'hide';
+				gameView.createQR();
+			} else {
+				nameInput.className = 'error';
+			}
 	  });
 	
 	  closeAbout.addEventListener('click', () => {
@@ -218,7 +234,8 @@
 	    canvasSize: this.canvasSize,
 	    ctx: this.ctx,
 	    gameView: this
-	  });
+		});
+		this.finalScore=0;
 	  this.defender = this.game.defender;
 	  this.isPaused = false;
 	
@@ -265,13 +282,12 @@
 	  this.leftPressed  = false;
 	  this.spacePressed = false;
 	  this.isPaused     = false;
-	  this.defender     = this.game.defender;
-	
+		this.defender     = this.game.defender;
 	  this.game = new Game({
 	    canvasSize: this.canvasSize,
 	    gameView:   this,
-	    ctx:        this.ctx
-	  });
+			ctx:        this.ctx
+		});
 	};
 	
 	GameView.prototype.restart = function() {
@@ -293,20 +309,68 @@
 	};
 	
 	GameView.prototype.gameOver = function() {
-	  this.stop();
-	
-	  document.getElementById('menu-container').className='hide';
-	
+		this.finalScore = this.game.score
+		this.stop();
+		
+		document.getElementById('menu-container').className='hide';
+		
 	  setTimeout(() => {
-	    this.ctx.clearRect(0, 0, this.DIM_X, this.DIM_Y);
+			this.ctx.clearRect(0, 0, this.DIM_X, this.DIM_Y);
 	    this.ctx.fillStyle = '#000';
-	    this.ctx.fillRect(0, 0, this.game.DIM_X, this.game.DIM_Y);
-	    let gameOverImage  = document.getElementById('game-over'),
-	        playGameButton = document.getElementById('play-game');
+			this.ctx.fillRect(0, 0, this.game.DIM_X, this.game.DIM_Y);
+			this.addEndScoreText(this.ctx, this.finalScore)
+			let gameOverImage  = document.getElementById('game-over'),
+					finalScore     = document.getElementById('final-score'),
+					nameInput      = document.getElementById('name-input'),
+					createQR      = document.getElementById('create-qr'),
+					playGameButton = document.getElementById('play-game');
+					menuButton = document.getElementById('menu-button');
 	    playGameButton.className = '';
-	    gameOverImage.className = '';
+			gameOverImage.className = '';
+			nameInput.className = '';
+			createQR.className = '';
+			menuButton.className = 'hide';
+			finalScore.firstChild.data = `SCORE: ${this.finalScore}`;
+			finalScore.className = '';
 	  }, 600);
 	
+	};
+
+	GameView.prototype.createQR = function() {
+		let nameInput  = document.getElementById('name-input'),
+				successText  = document.getElementById('success');
+
+		const datetime = new Date().toLocaleString()
+		const result = `Name: ${nameInput.value}, Score: ${this.finalScore}, Date: ${datetime}`
+		var qrcode = new QRCode("qrcode", {
+			text: result,
+			width: 130,
+			height: 130,
+			id: 'testimg'
+    });
+		qrcode.makeCode(result)
+		
+		successText.firstChild.data = `SUCCESS!`;
+		successText.className = '';
+		setTimeout(() => {
+			Email.send({
+				SecureToken  : "2174872e-fe1c-43df-a98b-02430b42e67e",
+				To : 'm.zavgar@mail.ru',
+				// To : 'chepsiilya@gmail.com',
+				From : 'makszavgar@gmail.com',
+				Subject : "Space Invaders result",
+				Body : `Я ${nameInput.value}, и мой результат: ${this.finalScore}!`,
+				Attachments : [
+					{
+						name : "qrresult.png",
+						data :  document.getElementById( 'qrcode' ).getElementsByTagName( 'img' )[0].src
+					}]
+			}).then(
+				// message => alert(message)
+			);
+		}, 1000);
+		
+
 	};
 	
 	GameView.KEY_BINDS = {
@@ -329,6 +393,12 @@
 	  let x = this.game.DIM_X * .01, y = this.game.DIM_Y * .05;
 	  // ctx.find = "20px Georgia";
 	  ctx.fillText(`SCORE: ${this.game.score}`, x, y);
+	};
+	GameView.prototype.addEndScoreText = function(ctx, score) {
+	  let x = this.game.DIM_X * .4, y = this.game.DIM_Y * .7;
+		// ctx.find = "20px Georgia";
+		ctx.font = "50px Bungee Inline";
+	  ctx.fillText(`SCORE: ${score}`, x, y);
 	};
 	
 	GameView.prototype.addLevelText = function(ctx) {
