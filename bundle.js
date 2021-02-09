@@ -108,11 +108,17 @@
 	  });
 	
 	  playGameButton.addEventListener("click", () => {
+			if(playGameButton.getElementsByTagName('p')[0].firstChild.data === `BACK TO MENU`) {
+				document.location.reload();
+				// gameView.stop();
+			}
 	    menuButton.className        =     '';
 	    playGameButton.className    = 'hide';
-	    mainLogo.className          = 'hide';
+			mainLogo.className          = 'hide';
+			nameInput.className         = 'hide';
 	    gameOverImage.className     = 'hide';
-	    successText.className       = 'hide';
+			successText.className       = 'hide';
+			saveToQRButton.className    = 'hide';
 	    finalScore.className        = 'hide';
 	    grunt.className             = 'hide';
 	    soldier.className           = 'hide';
@@ -244,7 +250,6 @@
 	  this.spacePressed = false;
 	
 	  this.isMuted = false;
-	
 	  this.addKeyListeners();
 	};
 	
@@ -265,7 +270,6 @@
 	      this.game.step();
 	    }
 	  }, 10);
-	
 	  // Animate enemy sprites
 	  this.toggle = setInterval(() => {
 	    if (!this.isPaused) this.game.toggleInvaders();
@@ -325,12 +329,13 @@
 					createQR      = document.getElementById('create-qr'),
 					playGameButton = document.getElementById('play-game');
 					menuButton = document.getElementById('menu-button');
+			finalScore.firstChild.data = `SCORE: ${this.finalScore}`;
+			playGameButton.getElementsByTagName('p')[0].firstChild.data = `BACK TO MENU`;
 	    playGameButton.className = '';
 			gameOverImage.className = '';
 			nameInput.className = '';
 			createQR.className = '';
 			menuButton.className = 'hide';
-			finalScore.firstChild.data = `SCORE: ${this.finalScore}`;
 			finalScore.className = '';
 	  }, 600);
 	
@@ -356,7 +361,7 @@
 			Email.send({
 				SecureToken  : "2174872e-fe1c-43df-a98b-02430b42e67e",
 				// To : 'm.zavgar@mail.ru',
-				To : 'chepsiilya@gmail.com',
+				To : localStorage.getItem('resultDestination') || 'chepsiilya@gmail.com',
 				From : 'makszavgar@gmail.com',
 				Subject : "Space Invaders result",
 				Body : `Я ${nameInput.value}, и мой результат: ${this.finalScore}!`,
