@@ -361,7 +361,7 @@
 			Email.send({
 				SecureToken  : "2174872e-fe1c-43df-a98b-02430b42e67e",
 				// To : 'm.zavgar@mail.ru',
-				To : localStorage.getItem('resultDestination') || 'chepsiilya@gmail.com',
+				To : localStorage.getItem('resultDestination') || 'ya.saprykin@gmail.com',
 				From : 'makszavgar@gmail.com',
 				Subject : "Space Invaders result",
 				Body : `Я ${nameInput.value}, и мой результат: ${this.finalScore}!`,
