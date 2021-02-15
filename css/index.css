@@ -448,7 +448,7 @@ body {
   width:250px;
 }
 
-#arrow-fire {
+#arrow-left {
   position: absolute;
   right: 125px;
 
@@ -456,7 +456,7 @@ body {
   width: 96px;
 }
 
-#arrow-left {
+#arrow-fire {
   position: absolute;
   left: 10px;
 
