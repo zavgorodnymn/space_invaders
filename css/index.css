@@ -19,7 +19,7 @@ body {
 }
 
 #control-panel {
-  height: 64px;
+  height: 256px;
   width: 900px;
   position: relative;
 }
@@ -450,24 +450,24 @@ body {
 
 #arrow-left {
   position: absolute;
-  right: 125px;
+  right: 300px;
 
-  height: 96px;
-  width: 96px;
+  height: 256px;
+  width: 256px;
 }
 
 #arrow-fire {
   position: absolute;
   left: 10px;
 
-  height: 96px;
-  width: 96px;
+  height: 256px;
+  width: 256px;
 }
 
 #arrow-right {
   position: absolute;
   right: 10px;
 
-  height: 96px;
-  width: 96px;
+  height: 256px;
+  width: 256px;
 }
