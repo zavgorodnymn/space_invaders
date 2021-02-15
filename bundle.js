@@ -362,7 +362,7 @@
 			createQR.className = '';
 			menuButton.className = 'hide';
 			finalScore.className = '';
-			arrowFight.className  = 'hide'
+			arrowFire.className  = 'hide'
 			arrowLeft.className   = 'hide'
 			arrowRight.className  = 'hide'
 	  }, 600);

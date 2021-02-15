@@ -18,6 +18,12 @@ body {
   background-color: #000;
 }
 
+#control-panel {
+  height: 64px;
+  width: 900px;
+  position: relative;
+}
+
 #game-canvas {
   margin: 0;
   padding: 0;
@@ -444,7 +450,6 @@ body {
 
 #arrow-fire {
   position: absolute;
-  bottom: 140px;
   right: 115px;
 
   height: 64px;
@@ -453,7 +458,6 @@ body {
 
 #arrow-left {
   position: absolute;
-  bottom: 140px;
   left: 10px;
 
   height: 64px;
@@ -462,7 +466,6 @@ body {
 
 #arrow-right {
   position: absolute;
-  bottom: 140px;
   right: 10px;
 
   height: 64px;
