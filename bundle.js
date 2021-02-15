@@ -59,8 +59,8 @@
 		const mobile = toMatch.some((toMatchItem) => {
 			return navigator.userAgent.match(toMatchItem);
 		})
-		console.log('window.frameElement', window.frameElement)
-		if(mobile && window.frameElement) window.top.location.href = 'https://zavgorodnymn.github.io/space_invaders_test/'
+		console.log('window.frameElement', window.frameElement, window.self !== window.top)
+		if(mobile && window.self !== window.top) window.top.location.href = 'https://zavgorodnymn.github.io/space_invaders_test/'
 	  const canvas = document.getElementById('game-canvas');
 	  canvas.height = 600;
 	  canvas.width = 900;
