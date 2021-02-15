@@ -441,3 +441,30 @@ body {
   left: 325px;
   width:250px;
 }
+
+#arrow-fire {
+  position: absolute;
+  bottom: 140px;
+  right: 115px;
+
+  height: 64px;
+  width: 64px;
+}
+
+#arrow-left {
+  position: absolute;
+  bottom: 140px;
+  left: 10px;
+
+  height: 64px;
+  width: 64px;
+}
+
+#arrow-right {
+  position: absolute;
+  bottom: 140px;
+  right: 10px;
+
+  height: 64px;
+  width: 64px;
+}

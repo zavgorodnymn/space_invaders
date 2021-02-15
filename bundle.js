@@ -47,6 +47,7 @@
 	const GameView = __webpack_require__(1);
 	
 	document.addEventListener('DOMContentLoaded', () => {
+		// console.log(' window.matchMedia(device.mobilePortrait).matches',  window.matchMedia('600px').matches, window.matchMedia('600px'))
 	  const canvas = document.getElementById('game-canvas');
 	  canvas.height = 600;
 	  canvas.width = 900;
@@ -82,6 +83,9 @@
 	  const audio              = document.getElementById('audio');
 	  const mute               = document.getElementById('mute');
 	  const splashInstruction  = document.getElementById('splash-instruction');
+	  const arrowLeft          = document.getElementById('arrow-left');
+	  const arrowRight         = document.getElementById('arrow-right');
+	  const arrowFight         = document.getElementById('arrow-fire');
 	
 	  audio.addEventListener('click', () => {
 	    if (audio.className === 'hide') {
@@ -125,7 +129,10 @@
 	    invader.className           = 'hide';
 	    ufo.className               = 'hide';
 	    invaderInfo.className       = 'hide';
-	    splashInstruction.className = 'hide';
+			splashInstruction.className = 'hide';
+			arrowFight.className        = ''
+			arrowLeft.className         = ''
+			arrowRight.className        = ''
 	
 	    gameView.start();
 	  });
@@ -328,7 +335,10 @@
 					nameInput      = document.getElementById('name-input'),
 					createQR      = document.getElementById('create-qr'),
 					playGameButton = document.getElementById('play-game');
-					menuButton = document.getElementById('menu-button');
+					menuButton = document.getElementById('menu-button'),
+					arrowFire  = document.getElementById('arrow-fire'),
+					arrowLeft  = document.getElementById('arrow-left'),
+					arrowRight = document.getElementById('arrow-right');
 			finalScore.firstChild.data = `SCORE: ${this.finalScore}`;
 			playGameButton.getElementsByTagName('p')[0].firstChild.data = `BACK TO MENU`;
 	    playGameButton.className = '';
@@ -337,6 +347,9 @@
 			createQR.className = '';
 			menuButton.className = 'hide';
 			finalScore.className = '';
+			arrowFight.className  = ''
+			arrowLeft.className   = ''
+			arrowRight.className  = ''
 	  }, 600);
 	
 	};
@@ -424,10 +437,21 @@
 	
 	GameView.prototype.addKeyListeners = function() {
 	  document.addEventListener('keydown', this.handleKeyDown.bind(this), false);
-	  document.addEventListener('keyup', this.handleKeyUp.bind(this), false);
+		document.addEventListener('keyup', this.handleKeyUp.bind(this), false);
+		
+		let arrowFire  = document.getElementById('arrow-fire'),
+		    arrowLeft  = document.getElementById('arrow-left'),
+				arrowRight = document.getElementById('arrow-right');
+				arrowFire.addEventListener('mousedown', this.handleMouseDown.bind(this, 'fire'), false);
+				arrowFire.addEventListener('mouseup', this.handleMouseUp.bind(this, 'fire'), false);
+				arrowLeft.addEventListener('mousedown', this.handleMouseDown.bind(this, 'left'), false);
+				arrowLeft.addEventListener('mouseup', this.handleMouseUp.bind(this, 'left'), false);
+				arrowRight.addEventListener('mousedown', this.handleMouseDown.bind(this, 'right'), false);
+				arrowRight.addEventListener('mouseup', this.handleMouseUp.bind(this, 'right'), false);
 	};
 	
 	GameView.prototype.handleKeyDown = function(e) {
+		console.log('click down')
 	  if (e.keyCode === 37) {
 	    this.leftPressed = true;
 	  } else if (e.keyCode === 39) {
@@ -440,6 +464,7 @@
 	};
 	
 	GameView.prototype.handleKeyUp = function(e) {
+		console.log('click up')
 	  if (e.keyCode === 37) {
 	    this.leftPressed = false;
 	  } else if (e.keyCode === 39) {
@@ -449,6 +474,31 @@
 	  if (e.keyCode === 32) {
 	    this.spacePressed = false;
 	  }
+	};
+
+	GameView.prototype.handleMouseDown = function(direction, e ) {
+	  if (direction === 'left') {
+	    this.leftPressed = true;
+	  } else if (direction === 'right') {
+	    this.rightPressed = true;
+	  }
+	  if (direction === 'fire') {
+	    this.spacePressed = true;
+	  }
+	};
+	
+	GameView.prototype.handleMouseUp = function(direction, e) {
+	  setTimeout(() => {
+			if (direction === 'left') {
+				this.leftPressed = false;
+			} else if (direction === 'right') {
+				this.rightPressed = false;
+			}
+		
+			if (direction === 'fire') {
+				this.spacePressed = false;
+			}
+		}, 50);
 	};
 	
 	GameView.prototype.moveDefender = function() {
