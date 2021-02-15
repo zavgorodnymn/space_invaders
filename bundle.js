@@ -60,7 +60,7 @@
 			return navigator.userAgent.match(toMatchItem);
 		})
 
-		if(mobile) window.location.href = 'https://zavgorodnymn.github.io/space_invaders_test/'
+		if(mobile) window.top.location.href = 'https://zavgorodnymn.github.io/space_invaders_test/'
 	  const canvas = document.getElementById('game-canvas');
 	  canvas.height = 600;
 	  canvas.width = 900;
