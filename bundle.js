@@ -47,7 +47,6 @@
 	const GameView = __webpack_require__(1);
 	
 	document.addEventListener('DOMContentLoaded', () => {
-		console.log('navigator.userAgent', navigator.userAgent)
 		const toMatch = [
 			/Android/i,
 			/webOS/i,
@@ -60,7 +59,6 @@
 		const mobile = toMatch.some((toMatchItem) => {
 			return navigator.userAgent.match(toMatchItem);
 		})
-		console.log('mobile', mobile)
 	  const canvas = document.getElementById('game-canvas');
 	  canvas.height = 600;
 	  canvas.width = 900;
