@@ -47,7 +47,20 @@
 	const GameView = __webpack_require__(1);
 	
 	document.addEventListener('DOMContentLoaded', () => {
-		// console.log(' window.matchMedia(device.mobilePortrait).matches',  window.matchMedia('600px').matches, window.matchMedia('600px'))
+		console.log('navigator.userAgent', navigator.userAgent)
+		const toMatch = [
+			/Android/i,
+			/webOS/i,
+			/iPhone/i,
+			/iPad/i,
+			/iPod/i,
+			/BlackBerry/i,
+			/Windows Phone/i
+	];
+		const mobile = toMatch.some((toMatchItem) => {
+			return navigator.userAgent.match(toMatchItem);
+		})
+		console.log('mobile', mobile)
 	  const canvas = document.getElementById('game-canvas');
 	  canvas.height = 600;
 	  canvas.width = 900;
@@ -130,9 +143,11 @@
 	    ufo.className               = 'hide';
 	    invaderInfo.className       = 'hide';
 			splashInstruction.className = 'hide';
-			arrowFight.className        = ''
-			arrowLeft.className         = ''
-			arrowRight.className        = ''
+			if(mobile) {
+				arrowFight.className        = ''
+				arrowLeft.className         = ''
+				arrowRight.className        = ''
+			}
 	
 	    gameView.start();
 	  });
@@ -347,9 +362,9 @@
 			createQR.className = '';
 			menuButton.className = 'hide';
 			finalScore.className = '';
-			arrowFight.className  = ''
-			arrowLeft.className   = ''
-			arrowRight.className  = ''
+			arrowFight.className  = 'hide'
+			arrowLeft.className   = 'hide'
+			arrowRight.className  = 'hide'
 	  }, 600);
 	
 	};
@@ -442,16 +457,15 @@
 		let arrowFire  = document.getElementById('arrow-fire'),
 		    arrowLeft  = document.getElementById('arrow-left'),
 				arrowRight = document.getElementById('arrow-right');
-				arrowFire.addEventListener('mousedown', this.handleMouseDown.bind(this, 'fire'), false);
-				arrowFire.addEventListener('mouseup', this.handleMouseUp.bind(this, 'fire'), false);
-				arrowLeft.addEventListener('mousedown', this.handleMouseDown.bind(this, 'left'), false);
-				arrowLeft.addEventListener('mouseup', this.handleMouseUp.bind(this, 'left'), false);
-				arrowRight.addEventListener('mousedown', this.handleMouseDown.bind(this, 'right'), false);
-				arrowRight.addEventListener('mouseup', this.handleMouseUp.bind(this, 'right'), false);
+				arrowFire.addEventListener('touchstart', this.handleMouseDown.bind(this, 'fire'), false);
+				arrowFire.addEventListener('touchend', this.handleMouseUp.bind(this, 'fire'), false);
+				arrowLeft.addEventListener('touchstart', this.handleMouseDown.bind(this, 'left'), false);
+				arrowLeft.addEventListener('touchend', this.handleMouseUp.bind(this, 'left'), false);
+				arrowRight.addEventListener('touchstart', this.handleMouseDown.bind(this, 'right'), false);
+				arrowRight.addEventListener('touchend', this.handleMouseUp.bind(this, 'right'), false);
 	};
 	
 	GameView.prototype.handleKeyDown = function(e) {
-		console.log('click down')
 	  if (e.keyCode === 37) {
 	    this.leftPressed = true;
 	  } else if (e.keyCode === 39) {
@@ -464,7 +478,6 @@
 	};
 	
 	GameView.prototype.handleKeyUp = function(e) {
-		console.log('click up')
 	  if (e.keyCode === 37) {
 	    this.leftPressed = false;
 	  } else if (e.keyCode === 39) {
@@ -477,6 +490,7 @@
 	};
 
 	GameView.prototype.handleMouseDown = function(direction, e ) {
+		e.preventDefault()
 	  if (direction === 'left') {
 	    this.leftPressed = true;
 	  } else if (direction === 'right') {
@@ -488,7 +502,7 @@
 	};
 	
 	GameView.prototype.handleMouseUp = function(direction, e) {
-	  setTimeout(() => {
+		e.preventDefault()
 			if (direction === 'left') {
 				this.leftPressed = false;
 			} else if (direction === 'right') {
@@ -498,7 +512,6 @@
 			if (direction === 'fire') {
 				this.spacePressed = false;
 			}
-		}, 50);
 	};
 	
 	GameView.prototype.moveDefender = function() {
